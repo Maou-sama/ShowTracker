@@ -1,3 +1,3 @@
 # ShowTracker
 CS4523 Design Project 
-WORK IN PROGRESS
+# WORK IN PROGRESS
