@@ -38,64 +38,29 @@
 		<table class="table table-hover">
 		  <thead class="thead-dark">
 		    <tr>
-		      <th scope="col">#</th>
 		      <th scope="col">Title</th>
-		      <th scope="col">Author/Producer</th>
-		      <th scope="col">Date Released</th>
+		      <th scope="col">Popularity</th>
+		      <th scope="col">Poster</th>
+			  <th scope="col">Original Language</th>
+			  <th scope="col">Original Title</th>
+			  <th scope="col">Overview</th>
+			  <th scope="col">Release Date</th>
 		      <th scope="col">Add to List?</th>
 		    </tr>
 		  </thead>
 		  <tbody>
+			{% for line in movies %}
 		    <tr>
-		      <th scope="row">1</th>
-		      <td>Title1</td>
-		      <td>Author1</td>
-		      <td>Date1</td>
+		      <td>{{line.GetTitle()}}</td>
+			  <td>{{line.GetPopularity()}}</td>
+		      <td><img src={{line.GetPosterPath()}}></td>
+			  <td>{{line.GetOriginalLanguage()}}</td>
+			  <td>{{line.GetOriginalTitle()}}</td>
+			  <td>{{line.GetOverview()}}</td>
+			  <td>{{line.GetReleaseDate()}}</td>
 		      <td><button type="submit" class="btn btn-primary">Add</button></td>
 		    </tr>
-		    <tr>
-		      <th scope="row">2</th>
-		      <td>Title2</td>
-		      <td>Author2</td>
-		      <td>Date2</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-
-		    </tr>
-		    <tr>
-		      <th scope="row">3</th>
-		      <td>Title3</td>
-		      <td>Author3</td>
-		      <td>Date3</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">4</th>
-		      <td>Title4</td>
-		      <td>Author4</td>
-		      <td>Date4</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">5</th>
-		      <td>Title5</td>
-		      <td>Author5</td>
-		      <td>Date5</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">6</th>
-		      <td>Title6</td>
-		      <td>Author6</td>
-		      <td>Date6</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">7</th>
-		      <td>Title7</td>
-		      <td>Author7</td>
-		      <td>Date7</td>
-		      <td><button type="submit" class="btn btn-primary">Add</button></td>
-		    </tr>
+			{% endfor %}
 		  </tbody>
 		</table>
 	</div>
