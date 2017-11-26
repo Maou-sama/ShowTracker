@@ -43,9 +43,7 @@ CREATE TABLE TV_shows(
 CREATE TABLE Other(
 	Record_ID INT	NOT NULL	UNIQUE,
 	Video_Author VARCHAR(255),
-	/*URL VARCHAR(2083),*/
+	/*URL VARCHAR(2083),*/	
 	PRIMARY KEY(Record_ID),
 	Foreign KEY (RECORD_ID) REFERENCES Watch_Records(RECORD_ID)
 );
-
-
