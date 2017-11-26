@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login</title>
+	<title>Register</title>
 	<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<style>
@@ -34,19 +34,20 @@
 	  </div>
 	</nav>
 
-	<div class = "container-fluid" style = "margin-top: 20vh; margin-left: 35vw">
+	<div class = "container-fluid" style = "margin-top: 15vh; width:50vw">
 		<form>
-		  <div class="form-group" style = "width: 30vw">
-		    <label for="exampleInputEmail1">Username: </label>
-		    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
+		  <div class="form-row">
+		    <div class="form-group col-md-6">
+		      <label for="inputEmail">Email</label>
+		      <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+		    </div>
+		    <div class="form-group col-md-6">
+		      <label for="inputPassword">Password</label>
+		      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+		    </div>
 		  </div>
-		  <div class="form-group" style = "width: 30vw">
-		    <label for="exampleInputPassword1">Password: </label>
-		    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-		  </div>
-		  <small id="emailHelp" class="form-text text-muted">Don't have an account? Register <a href = "register.html">here</a>.</small>
-		  <br />
-		  <button type="submit" class="btn btn-primary">Login</button>
+		  <button type="submit" class="btn btn-primary">Register</button>
+		   <small id="emailHelp" class="form-text text-muted">Upon successful registration you may log in immediately.</small>
 		</form>
 	</div>
 
