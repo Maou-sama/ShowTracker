@@ -6,6 +6,9 @@ from item import *
 
 url = 'https://api.themoviedb.org/3'
 
+#Poster URL for w185 picture
+poster_url = 'https://image.tmdb.org/t/p/w185'
+
 api_key = '214a06075aa82fef47cc3c4c2e61caf6'
 
 def SearchMovie(title):
@@ -14,13 +17,15 @@ def SearchMovie(title):
     payload = {'api_key' : api_key,  'query' : title}
     #Request the url
     r = requests.get(search_url,  params = payload)
+    
+    print(r.status_code)
     #Get the results of the search
     movie_details = json.loads(json.dumps(r.json()))['results']
     #Empty list of movie item objects
     mov_list = []
     #Create a movie item object based on the details of the json and append to the list
     for items in movie_details:
-        mov_list.append(movie_item(items['title'], items['popularity'], items['poster_path'], 1, items['original_language'], items['original_title'], items['overview'], items['release_date']))
+        mov_list.append(movie_item(items['title'], items['popularity'], poster_url + str(items['poster_path']), 1, items['original_language'], items['original_title'], items['overview'], items['release_date']))
     return mov_list
     
 def SearchTVShow(title):
@@ -40,5 +45,5 @@ def SearchTVShow(title):
     for items in tv_details:
         new_r = requests.get(search_url_detail+str(items['id']), params=payload_detail)
         ep_number = json.loads(json.dumps(new_r.json()))['number_of_episodes']
-        tv_list.append(movie_item(items['name'], items['popularity'], items['poster_path'], ep_number, items['original_language'], items['original_name'], items['overview'], items['first_air_date']))
+        tv_list.append(movie_item(items['name'], items['popularity'], poster_url + items['poster_path'], ep_number, items['original_language'], items['original_name'], items['overview'], items['first_air_date']))
     return tv_list

@@ -21,7 +21,7 @@ class movie_item(object):
         return self.episode
     def GetOriginalLanguage(self):
         return self.original_language
-    def GettOriginalTitle(self):
+    def GetOriginalTitle(self):
         return self.original_title
     def GetOverview(self):
         return self.overview
@@ -61,7 +61,7 @@ class anime_item(object):
         return self.poster_path
     def GetEpisode(self):
         return self.episode
-    def GettJapaneseTitle(self):
+    def GetJapaneseTitle(self):
         return self.japanese_title
     def GetOverview(self):
         return self.overview
