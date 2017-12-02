@@ -5,13 +5,38 @@
 	<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<style>
+		body
+		{
+			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
+			padding:	0px;
+		}
+
+		h1
+		{
+			text-align:	center;
+		}
+
 		div
 		{
 			border:	solid 0px black;
 		}
+
+		.container-fluid
+		{
+			border:	solid 0.1px white;
+			text-align:	center;
+			background-color:	white;
+			opacity:	0.85;
+		}
+
 		.updater
 		{
 			width:	5vw;
+		}
+
+		.tdButton
+		{
+			width:	5%;
 		}
 	</style>
 </head>
@@ -37,9 +62,11 @@
 	    </ul>
 	  </div>
 	</nav>
+	<div class = "container-fluid">
+		<h1>General Shows</h1>
 
-	<div class = "container-fluid" style = "margin-top: 20px; text-align: center">
-		<table class="table table-hover">
+		<hr />
+		<table class="table table-hover" id = "showTable">
 		  <thead class="thead-dark">
 		    <tr>
 		      <th scope="col">#</th>
@@ -58,7 +85,8 @@
 		      <td>Date1</td>
 		      <td>1</td>
 		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
 		    </tr>
 		    <tr>
 		      <th scope="row">2</th>
@@ -67,7 +95,8 @@
 		      <td>Date2</td>
 		      <td>1</td>
 		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
 		    </tr>
 		    <tr>
 		      <th scope="row">3</th>
@@ -76,48 +105,102 @@
 		      <td>Date3</td>
 		      <td>1</td>
 		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">4</th>
-		      <td>Title4</td>
-		      <td>Author4</td>
-		      <td>Date4</td>
-		      <td>1</td>
-		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">5</th>
-		      <td>Title5</td>
-		      <td>Author5</td>
-		      <td>Date5</td>
-		      <td>1</td>
-		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">6</th>
-		      <td>Title6</td>
-		      <td>Author6</td>
-		      <td>Date6</td>
-		      <td>1</td>
-		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
-		    </tr>
-		    <tr>
-		      <th scope="row">7</th>
-		      <td>Title7</td>
-		      <td>Author7</td>
-		      <td>Date7</td>
-		      <td>1</td>
-		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
-		      <td><button type="submit" class="btn btn-primary">Delete</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
 		    </tr>
 		  </tbody>
 		</table>
 
-		<button type="submit" class="btn btn-primary">Update Shows</button>
+		<br />
+
+		<h1>Movies</h1>
+
+		<hr />
+
+		<table class="table table-hover" id = "movieTable">
+		  <thead class="thead-dark">
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Title</th>
+		      <th scope="col">Author/Producer</th>
+		      <th scope="col">Date Released</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>Title1</td>
+		      <td>Author1</td>
+		      <td>Date1</td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">2</th>
+		      <td>Title2</td>
+		      <td>Author2</td>
+		      <td>Date2</td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">3</th>
+		      <td>Title3</td>
+		      <td>Author3</td>
+		      <td>Date3</td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		  </tbody>
+		</table>
+
+		<br />
+
+		<h1>Anime</h1>
+
+		<hr />
+
+		<table class="table table-hover" id = "animeTable">
+		  <thead class="thead-dark">
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Title</th>
+		      <th scope="col">Author/Producer</th>
+		      <th scope="col">Date Released</th>
+		      <th scope="col">Episode Number</th>
+		      <th scope="col" class = "updater">Update</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">1</th>
+		      <td>Title1</td>
+		      <td>Author1</td>
+		      <td>Date1</td>
+		      <td>1</td>
+		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">2</th>
+		      <td>Title2</td>
+		      <td>Author2</td>
+		      <td>Date2</td>
+		      <td>1</td>
+		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">3</th>
+		      <td>Title3</td>
+		      <td>Author3</td>
+		      <td>Date3</td>
+		      <td>1</td>
+		      <td ><input type="text" class="form-control" aria-label="Text input with checkbox" ></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Update</button></td>
+		      <td class = "tdButton"><button type="submit" class="btn btn-primary">Delete</button></td>
+		    </tr>
+		  </tbody>
+		</table>
 	</div>
 
 
