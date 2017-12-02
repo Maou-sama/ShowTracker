@@ -41,19 +41,22 @@
 	</nav>
 
 	<div class = "container-fluid">
-		<form>
+		<form action="/registerAuth" method="POST">
 		  <div class="form-row">
 		    <div class="form-group col-md-6">
-		      <label for="inputEmail">Email</label>
-		      <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+		      <label for="username">Email</label>
+		      <input type="email" class="form-control" id="username" name="username" placeholder="Email">
 		    </div>
 		    <div class="form-group col-md-6">
-		      <label for="inputPassword">Password</label>
-		      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+		      <label for="password">Password</label>
+		      <input type="password" class="form-control" id="password" name="password" placeholder="Password">
 		    </div>
 		  </div>
 		  <button type="submit" class="btn btn-primary">Register</button>
 		   <small id="emailHelp" class="form-text text-muted">Upon successful registration you may log in immediately.</small>
+		   {% if message %}
+			<p class="error"><strong>Error:</strong> {{message}}</p>
+			{% endif %}
 		</form>
 	</div>
 
