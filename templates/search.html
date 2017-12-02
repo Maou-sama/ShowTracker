@@ -5,9 +5,24 @@
 	<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<style>
+		body
+		{
+			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
+			padding:	0px;
+		}
+
+
 		div
 		{
 			border:	solid 0px black;
+		}
+
+		.container-fluid
+		{
+			text-align:	center;
+			border:	solid 0.1px white;
+			background-color:	white;
+			opacity:	0.85;
 		}
 	</style>
 </head>
@@ -35,7 +50,7 @@
 	</nav>
 
 	<div class = "container-fluid" style = "margin-top: 20px; text-align: center">
-		<div class="row" style = "width: 50vw; margin-left: 25vw; margin-top: 20vh">
+		<div class="row">
 		  <div class="col-lg-12">
 			<form action="/tvresult" method="POST">
 		    <div class="input-group">
@@ -48,7 +63,7 @@
 		  </div>
 		</div>
 
-		<div class="row" style = "width: 50vw; margin-left: 25vw; margin-top: 10vh">
+		<div class="row">
 		  <div class="col-lg-12">
 			<form action="/movieresult" method="POST">
 		    <div class="input-group">
@@ -60,7 +75,7 @@
 		  </div>
 		</div>
 
-		<div class="row" style = "width: 50vw; margin-left: 25vw; margin-top: 10vh">
+		<div class="row">
 		  <div class="col-lg-12">
 			<form action="/animeresult" method="POST">
 		    <div class="input-group">
