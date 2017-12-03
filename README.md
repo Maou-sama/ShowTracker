@@ -17,4 +17,5 @@ Dependency:
 -mysql database
 
 First initialize the database using initializeDB function
+
 Then run ShowTracker.py with database online
