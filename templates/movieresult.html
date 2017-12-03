@@ -5,24 +5,9 @@
 	<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<style>
-		body
-		{
-			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
-			padding:	0px;
-		}
-
-
 		div
 		{
 			border:	solid 0px black;
-		}
-
-		.container-fluid
-		{
-			text-align:	center;
-			border:	solid 0.1px white;
-			background-color:	white;
-			opacity:	0.85;
 		}
 		
 		#overview
@@ -42,13 +27,13 @@
 	  <div class="collapse navbar-collapse" id="navbarToggler">
 	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 	      <li class="nav-item">
-	        <a class="nav-link" href="home.html">Home</a>
+	        <a class="nav-link" href="/home">Home</a>
 	      </li>
 	      <li class="nav-item active">
-	        <a class="nav-link" href="search.html">Search <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="/search">Search <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="tracker.html">Tracker</a>
+	        <a class="nav-link" href="/tracking">Tracker</a>
 	      </li>
 	    </ul>
 	  </div>
@@ -64,6 +49,7 @@
 			  <th scope="col">Original Language</th>
 			  <th scope="col">Original Title</th>
 			  <th scope="col" id = "overview">Overview</th>
+			  <th scope="col">Type</th>
 			  <th scope="col">Release Date</th>
 		      <th scope="col">Add to List?</th>
 		    </tr>
@@ -71,17 +57,21 @@
 		  <tbody>
 			{% for line in movies %}
 		    <tr>
-		      <td>{{line.GetTitle()}}</td>
-			  <td>{{line.GetPopularity()}}</td>
+			<form action="/addMedia" method="POST">
+		      <td><input type="hidden" id="id" name="id" value={{line.GetID()}}>{{line.GetTitle()}}</td>
+			  <td>{{line.GetPopularity()}}</td>	
 		      <td><img src={{line.GetPosterPath()}}></td>
 			  <td>{{line.GetOriginalLanguage()}}</td>
 			  <td>{{line.GetOriginalTitle()}}</td>
 			  <td>{{line.GetOverview()}}</td>
+			  <td><input type="hidden" id="type" name="type" value="Movie">Movie</td>
 			  <td>{{line.GetReleaseDate()}}</td>
 		      <td><button type="submit" class="btn btn-primary">Add</button></td>
+			</form>
 		    </tr>
 			{% endfor %}
 		  </tbody>
+		</form>
 		</table>
 	</div>
 

@@ -139,11 +139,19 @@ def checkLogin(email, password):
 	DATABASE.close()
 	return result[0]
 
+def getUserID(email):
+        DATABASE = connectDB()
+        cursor = DATABASE.cursor()
+        cursor.execute("""SELECT User_ID FROM Login_info WHERE Email = %s;""", (email,))
+
+        result = cursor.fetchone()
+        cursor.close()
+        DATABASE.close()
+        return result[0]
 	
 def insertNewRecord(userID, videoName, platformName, videoType, cursor):	
 	cursor.execute("""INSERT INTO Watch_Records (User_ID, Name, Video_Type, Date_Watched, Platform)
                 VALUES (%s, %s, %s, NOW(), %s);""", (userID, videoName, videoType, platformName))
-	cursor.close()
 
 def insertNewMovie(userID, videoName, platformName, director, year):
 	database = connectDB()
@@ -188,21 +196,21 @@ def updateRecord(userID, recordID):
 	cursor.close()
 	database.close()
 	
-def updateTVshow(userID, recordID, lastEpisodeWatched, season = None):
+def updateTVShow(userID, recordID, lastEpisodeWatched):
 	database = connectDB()
 	cursor = database.cursor()
-	cursor.execute("""UPDATE Watch_Records 
-                    SET Date_Watched = NOW() 
-                    WHERE Record_ID = %s AND User_ID = %s;""", (recordID, userID))
-	if season is None:
-		cursor.execute("""UPDATE TV_shows 
-						SET Recent_Episode_Watched = %s 
-						WHERE Record_ID = %s""", (lastEpisodeWatched, recordID))
-	else:
-		cursor.execute("""UPDATE TV_shows 
-						SET Recent_Episode_Watched = %s,
-							Season_Number = %s
-						WHERE Record_ID = %s""", (lastEpisodeWatched, season, recordID))
+	cursor.execute("""SELECT Season_Number FROM tv_shows
+					WHERE Record_ID = %s ;""", (recordID,))
+	result = cursor.fetchone()
+
+	if(lastEpisodeWatched <= result[0]):
+                cursor.execute("""UPDATE Watch_Records 
+                                SET Date_Watched = NOW() 
+                                WHERE Record_ID = %s AND User_ID = %s;""", (recordID, userID))
+                cursor.execute("""UPDATE TV_shows 
+                                SET Recent_Episode_Watched = %s 
+                                WHERE Record_ID = %s""", (lastEpisodeWatched, recordID))
+                
 	database.commit()
 	cursor.close()
 	database.close()
@@ -218,10 +226,10 @@ def deleteRecord(userID, recordID):
 		cursor.execute("""DELETE FROM Movies 
                         WHERE Record_ID = %s ;""", (recordID,))
 	elif(result[0] == 'T' or result[0] == 'A'):
-		cursor.execute("""DELETE FROM Movies 
+		cursor.execute("""DELETE FROM tv_shows 
                         WHERE Record_ID = %s ;""", (recordID,))
 	else:
-		cursor.execute("""DELETE FROM Movies 
+		cursor.execute("""DELETE FROM other 
                         WHERE Record_ID = %s ;""", (recordID,))
 	cursor.execute("""DELETE FROM Watch_Records 
                     WHERE Record_ID = %s AND User_ID = %s ;""", (recordID, userID))
@@ -260,7 +268,7 @@ def getAllUserMovieRecords(userID, desending = True, sortedColumn = None):
 	cursor = DATABASE.cursor()
 	
 	query = """SELECT * FROM Watch_Records LEFT JOIN Movies 
-			ON Watch_Records.Record_ID = Movies.Record_ID;
+			ON Watch_Records.Record_ID = Movies.Record_ID
 			WHERE Video_Type = 'M' AND User_ID = %s """
 	if(sortedColumn == None):
 		query = query + "ORDER BY Date_Watched "
@@ -273,15 +281,33 @@ def getAllUserMovieRecords(userID, desending = True, sortedColumn = None):
 		query = query + "ASC ;"
 	
 	cursor.execute(query, (userID,))
-	return cursor
+	result = cursor.fetchall()
+	return result
 	
 def getAllUserTVRecords(userID, desending = True, sortedColumn = None):
 	DATABASE = connectDB()
 	cursor = DATABASE.cursor()
+
+	query = """SELECT * FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'T' AND User_ID = %s """
 	
-	query = """SELECT * FROM Watch_Records LEFT JOIN TV_shows 
-            ON Watch_Records.Record_ID = TV_shows.Record_ID 
-            WHERE (Video_Type = 'T' OR Video_Type = 'A') AND User_ID = %s """
+	if(sortedColumn == None):
+		query = query + "ORDER BY Date_Watched "
+	else:
+		query = query + "ORDER BY " + sortedColumn + " "
+		
+	if(desending):
+		query = query + "DESC ;"
+	else:
+		query = query + "ASC ;"
+	
+	cursor.execute(query, (userID,))
+	return cursor
+
+def getAllUserAnimeRecords(userID, desending = True, sortedColumn = None):
+	DATABASE = connectDB()
+	cursor = DATABASE.cursor()
+	
+	query = """SELECT * FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'A' AND User_ID = %s """
 	
 	if(sortedColumn == None):
 		query = query + "ORDER BY Date_Watched "

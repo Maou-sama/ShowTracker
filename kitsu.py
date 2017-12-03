@@ -6,11 +6,24 @@ from item import *
 
 url = 'https://kitsu.io/api/edge'
 
+def SearchAnimeWithID(database_id):
+    #API url for searching
+    search_url = url + '/anime'
+    payload = {'filter[id]' : database_id}
+    #Request the url
+    r = requests.get(search_url, params=payload)
+    #Get the results of the search
+    anime_details = json.loads(json.dumps(r.json()))['data'][0]['attributes']
+    #Put the title, episode # and release date in a list and return it
+    listOfDetails = [anime_details['canonicalTitle'], anime_details['episodeCount'], anime_details['startDate']]
+    
+    return listOfDetails
+
 def SearchAnime(title):
     #API url for searching
     search_url = url + '/anime'
     payload = {'filter[text]' : title, 'page[limit]' : 20}
-    #Request the ur;
+    #Request the url
     r = requests.get(search_url, params=payload)
     #Get the results of the search
     anime_details = json.loads(json.dumps(r.json()))['data']
@@ -20,8 +33,22 @@ def SearchAnime(title):
     for items in anime_details:
         item_attributes = items['attributes']
         if 'ja_jp' in item_attributes['titles']:
-            ani_list.append(anime_item(item_attributes['canonicalTitle'], item_attributes['averageRating'], item_attributes['posterImage']['small'], item_attributes['episodeCount'], item_attributes['titles']['ja_jp'], item_attributes['synopsis'], item_attributes['startDate']))
+            ani_list.append(anime_item(str(items['id']),
+                                       str(item_attributes['canonicalTitle']),
+                                       str(item_attributes['averageRating']),
+                                       str(item_attributes['posterImage']['small']),
+                                       str(item_attributes['episodeCount']),
+                                       str(item_attributes['titles']['ja_jp']),
+                                       str(item_attributes['synopsis']),
+                                       str(item_attributes['startDate'])))
         else:
-            ani_list.append(anime_item(item_attributes['canonicalTitle'], item_attributes['averageRating'], item_attributes['posterImage']['small'], item_attributes['episodeCount'], None, item_attributes['synopsis'], item_attributes['startDate']))
+            ani_list.append(anime_item(str(items['id']),
+                                       str(item_attributes['canonicalTitle']),
+                                       str(item_attributes['averageRating']),
+                                       str(item_attributes['posterImage']['small']),
+                                       str(item_attributes['episodeCount']),
+                                       None,
+                                       str(item_attributes['synopsis']),
+                                       str(item_attributes['startDate'])))
         
     return ani_list

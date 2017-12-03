@@ -1,7 +1,8 @@
 #A class for storing movie information
 
 class movie_item(object):   
-    def __init__(self, title,  popularity,  poster_path, episode, original_language, original_title,  overview,  release_date):
+    def __init__(self, database_id, title,  popularity,  poster_path, episode, original_language, original_title,  overview,  release_date):
+        self.database_id = database_id
         self.title = title
         self.popularity = popularity
         self.poster_path = poster_path
@@ -10,7 +11,9 @@ class movie_item(object):
         self.original_title = original_title
         self.overview = overview
         self.release_date = release_date
-        
+
+    def GetID(self):
+        return self.database_id
     def GetTitle(self):
         return self.title
     def GetPopularity(self):
@@ -44,7 +47,8 @@ class movie_item(object):
 #A class for storing anime movie information
         
 class anime_item(object):
-    def __init__(self, title,  average_rating,  poster_path, episode, japanese_title,  overview,  release_date):
+    def __init__(self, database_id, title,  average_rating,  poster_path, episode, japanese_title,  overview,  release_date):
+        self.database_id = database_id
         self.title = title
         self.average_rating = average_rating
         self.poster_path = poster_path
@@ -52,7 +56,9 @@ class anime_item(object):
         self.japanese_title = japanese_title
         self.overview = overview
         self.release_date = release_date
-        
+
+    def GetID(self):
+        return self.database_id
     def GetTitle(self):
         return self.title
     def GetAverageRating(self):
