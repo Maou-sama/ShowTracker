@@ -2,7 +2,7 @@
 
 import requests
 import json
-from item import *
+from Item import *
 
 url = 'https://api.themoviedb.org/3'
 
@@ -11,7 +11,7 @@ poster_url = 'https://image.tmdb.org/t/p/w185'
 
 api_key = '214a06075aa82fef47cc3c4c2e61caf6'
 
-def SearchMovieWithID(database_id):
+def LiteSearchMovieWithID(database_id):
     #API url to search movie
     search_url = url + '/movie/' + database_id
     payload = {'api_key' : api_key}
@@ -20,11 +20,13 @@ def SearchMovieWithID(database_id):
     #Get details
     movie_details = json.loads(json.dumps(r.json()))
     #Add title and release date to a list then return it
+    if(movie_details['release_date'] == None or movie_details['release_date'] == ''):
+        movie_details['release_date'] = '1900-01-01'
     listOfDetails = [movie_details['title'], movie_details['release_date']]
 
     return listOfDetails
 
-def SearchTVWithID(database_id):
+def LiteSearchTVWithID(database_id):
     #API url to search movie
     search_url = url + '/tv/' + database_id
     payload = {'api_key' : api_key}
@@ -33,6 +35,10 @@ def SearchTVWithID(database_id):
     #Get details
     tv_details = json.loads(json.dumps(r.json()))
     #Add title, release date and # of episode to a list then return it
+    if(tv_details['number_of_episodes'] == None):
+        tv_details['number_of_episodes'] = 9999
+    if(tv_details['first_air_date'] == None or tv_details['first_air_date'] == ''):
+        tv_details['first_air_date'] = '1900-01-01'
     listOfDetails = [tv_details['name'], tv_details['first_air_date'], tv_details['number_of_episodes']]
 
     return listOfDetails

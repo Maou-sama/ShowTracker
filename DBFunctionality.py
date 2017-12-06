@@ -11,13 +11,9 @@ defaultPassword = "";
 defaultDB = "showtrackerdb";
 defaultPort = 3306;
 
-DATABASE = None
-
-
-
 def connectDB ():
 	database = MySQLdb.connect(host = defaultHost,
-                     user = defaultUserName,  
+                     user = defaultUserName,
                      passwd = defaultPassword,
                      db = defaultDB,
                      port = defaultPort)
@@ -36,16 +32,17 @@ def changeDefaultDBConnection(port, username = None, password = None, host = Non
 	if(password):
 		defaultPassword = password
 
-	
-def initiateDB ():
-	initalDBConn = MySQLdb.connect(host = defaultHost,
-                     user = defaultUserName,  
-                     passwd = defaultPassword,
-					 port = defaultPort)
-					 
-	initalDBConn.query("CREATE DATABASE showtrackerdb;")
-	initalDBConn.commit();
-	initalDBConn.close()
+def wipeDB():
+        database = connectDB()
+        database.query("""DROP TABLE IF EXISTS Login_Info;""")
+        database.query("""DROP TABLE IF EXISTS Movies;""")
+        database.query("""DROP TABLE IF EXISTS TV_Shows;""")
+        database.query("""DROP TABLE IF EXISTS Other;""")
+        database.query("""DROP TABLE IF EXISTS Watch_Records;""")
+        database.commit()
+        database.close()
+        
+def initiateDB():
 	database = connectDB()
 	database.query("""CREATE TABLE Login_Info
 					(User_ID INT NOT NULL UNIQUE AUTO_INCREMENT, 
@@ -64,15 +61,17 @@ def initiateDB ():
                     FOREIGN KEY (User_ID) REFERENCES Login_Info(User_ID)
                     );""")
 	database.query("""CREATE TABLE Movies (
-                    Record_ID INT	NOT NULL	UNIQUE, 
+                    Record_ID INT	NOT NULL	UNIQUE,
+                    Database_ID INT,
                     Director VARCHAR(255), 
                     Year_Published SMALLINT, 
                     PRIMARY KEY(Record_ID), 
                     FOREIGN KEY (Record_ID) REFERENCES Watch_Records(Record_ID)
                     );""")
-	database.query("""CREATE TABLE TV_shows(
-                    Record_ID INT	NOT NULL	UNIQUE, 
-                    Season_Number TINYINT, 
+	database.query("""CREATE TABLE TV_Shows(
+                    Record_ID INT	NOT NULL	UNIQUE,
+                    Database_ID INT,
+                    Episode_Count SMALLINT, 
                     Year_Published SMALLINT, 
                     Recent_Episode_Watched SMALLINT, 
                     PRIMARY KEY(Record_ID), 
@@ -88,13 +87,13 @@ def initiateDB ():
 	database.close()
 
 def insertNewLogin(email, password):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	cursor.execute("""SELECT * FROM Login_info 
 					WHERE Email = %s ;""", (email,))
 	if(cursor.fetchone()):
 		cursor.close()
-		DATABASE.close()
+		database.close()
 		return -1
 	
 	salt = os.urandom(18)
@@ -107,21 +106,21 @@ def insertNewLogin(email, password):
 	cursor.execute("""INSERT INTO Login_info (Email, Password_Hash, Salt)
 					VALUES ( %s, %s, %s );""", (email, hash.decode(), base64.b64encode(salt).decode()))
 	
-	DATABASE.commit()
+	database.commit()
 	cursor.close()
-	DATABASE.close()
+	database.close()
 	
 	return checkLogin(email, password)
 
 def checkLogin(email, password):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	cursor.execute("""SELECT Email, Password_Hash, Salt FROM Login_info 
 					WHERE Email = %s ;""", (email,))
 	result = cursor.fetchone()
 	if(result == None):
 		cursor.close()
-		DATABASE.close()
+		database.close()
 		return -1
 	
 	saltStr = result[2]
@@ -136,42 +135,42 @@ def checkLogin(email, password):
 		return -1
 	
 	cursor.close()
-	DATABASE.close()
+	database.close()
 	return result[0]
 
 def getUserID(email):
-        DATABASE = connectDB()
-        cursor = DATABASE.cursor()
+        database = connectDB()
+        cursor = database.cursor()
         cursor.execute("""SELECT User_ID FROM Login_info WHERE Email = %s;""", (email,))
 
         result = cursor.fetchone()
         cursor.close()
-        DATABASE.close()
+        database.close()
         return result[0]
 	
 def insertNewRecord(userID, videoName, platformName, videoType, cursor):	
 	cursor.execute("""INSERT INTO Watch_Records (User_ID, Name, Video_Type, Date_Watched, Platform)
-                VALUES (%s, %s, %s, NOW(), %s);""", (userID, videoName, videoType, platformName))
+                VALUES (%s, %s, %s, CURDATE(), %s);""", (userID, videoName, videoType, platformName))
 
-def insertNewMovie(userID, videoName, platformName, director, year):
+def insertNewMovie(userID, database_id, videoName, platformName, director, year):
 	database = connectDB()
 	cursor = database.cursor()
 	insertNewRecord(userID, videoName, platformName, "M", cursor)
-	cursor.execute("""INSERT INTO Movies (Record_ID, Director, Year_Published)
-                    VALUES (LAST_INSERT_ID(), %s, %s);""", (director, year))
+	cursor.execute("""INSERT INTO Movies (Record_ID, Database_ID, Director, Year_Published)
+                    VALUES (LAST_INSERT_ID(), %s, %s, %s);""", (database_id, director, year))
 	database.commit()
 	cursor.close()
 	database.close()
 
-def insertNewTVshow(userID, videoName, platformName, yearPublished, season, lastEpisodeWatched, anime = None):
+def insertNewTVshow(userID, database_id, videoName, platformName, yearPublished, ep_count, lastEpisodeWatched, anime = None):
 	database = connectDB()
 	cursor = database.cursor()
 	if anime is None or anime is False:
 		insertNewRecord(userID, videoName, platformName, "T", cursor)
 	else:
 		insertNewRecord(userID, videoName, platformName, "A", cursor)
-	cursor.execute("""INSERT INTO TV_shows (Record_ID, Year_Published, Season_Number, Recent_Episode_Watched)
-					VALUES (LAST_INSERT_ID(), %s, %s, %s);""", (yearPublished, season, lastEpisodeWatched))
+	cursor.execute("""INSERT INTO TV_shows (Record_ID, Database_ID, Year_Published, Episode_Count, Recent_Episode_Watched)
+					VALUES (LAST_INSERT_ID(), %s, %s, %s, %s);""", (database_id, yearPublished, ep_count, lastEpisodeWatched))
 	database.commit()
 	cursor.close()
 	database.close()
@@ -190,7 +189,7 @@ def updateRecord(userID, recordID):
 	database = connectDB()
 	cursor = database.cursor()
 	cursor.execute("""UPDATE Watch_Records 
-                    SET Date_Watched = NOW() 
+                    SET Date_Watched = CURDATE() 
                     WHERE Record_ID = %s AND User_ID = %s;""", (recordID, userID))
 	database.commit()
 	cursor.close()
@@ -199,13 +198,13 @@ def updateRecord(userID, recordID):
 def updateTVShow(userID, recordID, lastEpisodeWatched):
 	database = connectDB()
 	cursor = database.cursor()
-	cursor.execute("""SELECT Season_Number FROM tv_shows
+	cursor.execute("""SELECT Episode_Count FROM tv_shows
 					WHERE Record_ID = %s ;""", (recordID,))
 	result = cursor.fetchone()
 
 	if(lastEpisodeWatched <= result[0]):
                 cursor.execute("""UPDATE Watch_Records 
-                                SET Date_Watched = NOW() 
+                                SET Date_Watched = CURDATE() 
                                 WHERE Record_ID = %s AND User_ID = %s;""", (recordID, userID))
                 cursor.execute("""UPDATE TV_shows 
                                 SET Recent_Episode_Watched = %s 
@@ -231,6 +230,7 @@ def deleteRecord(userID, recordID):
 	else:
 		cursor.execute("""DELETE FROM other 
                         WHERE Record_ID = %s ;""", (recordID,))
+		
 	cursor.execute("""DELETE FROM Watch_Records 
                     WHERE Record_ID = %s AND User_ID = %s ;""", (recordID, userID))
 	database.commit()
@@ -238,11 +238,11 @@ def deleteRecord(userID, recordID):
 	database.close()
 	
 def getAllUserRecords(userID, addSeasonEpisodeNumber = False, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
 	if(addSeasonEpisodeNumber):
-		query = """SELECT User_ID, Watch_Records.Record_ID, Video_Type, Date_Watched, Platform, Season_Number, Recent_Episode_Watched 
+		query = """SELECT User_ID, Watch_Records.Record_ID, Video_Type, Date_Watched, Platform, Episode_Count, Recent_Episode_Watched 
             FROM Watch_Records LEFT JOIN TV_shows 
             ON Watch_Records.Record_ID = TV_shows.Record_ID 
             WHERE User_ID = %s """;
@@ -264,8 +264,8 @@ def getAllUserRecords(userID, addSeasonEpisodeNumber = False, desending = True, 
 	return cursor
 
 def getAllUserMovieRecords(userID, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
 	query = """SELECT * FROM Watch_Records LEFT JOIN Movies 
 			ON Watch_Records.Record_ID = Movies.Record_ID
@@ -285,10 +285,11 @@ def getAllUserMovieRecords(userID, desending = True, sortedColumn = None):
 	return result
 	
 def getAllUserTVRecords(userID, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 
-	query = """SELECT * FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'T' AND User_ID = %s """
+	query = """SELECT *, concat('width:',round(( Recent_Episode_Watched/Episode_Count * 100 ),2),'%%') as Percentage
+                FROM Watch_Records LEFT JOIN TV_Shows ON Watch_Records.Record_ID = TV_Shows.Record_ID WHERE Video_Type = 'T' AND User_ID = %s """
 	
 	if(sortedColumn == None):
 		query = query + "ORDER BY Date_Watched "
@@ -304,10 +305,11 @@ def getAllUserTVRecords(userID, desending = True, sortedColumn = None):
 	return cursor
 
 def getAllUserAnimeRecords(userID, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
-	query = """SELECT * FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'A' AND User_ID = %s """
+	query = """SELECT *, concat('width:',round(( recent_episode_watched/episode_count * 100 ),2),'%%') AS style
+                FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'A' AND User_ID = %s """
 	
 	if(sortedColumn == None):
 		query = query + "ORDER BY Date_Watched "
@@ -323,8 +325,8 @@ def getAllUserAnimeRecords(userID, desending = True, sortedColumn = None):
 	return cursor
 
 def getAllOtherTVRecords(userID, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
 	query = """SELECT * FROM Watch_Records LEFT JOIN Other 
             ON Watch_Records.Record_ID = Other.Record_ID 
@@ -344,8 +346,8 @@ def getAllOtherTVRecords(userID, desending = True, sortedColumn = None):
 	return cursor	
 
 def searchByName(userID, target, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
 	query = """SELECT * FROM Watch_Records 
             WHERE User_ID = %s AND Name LIKE %s """
@@ -364,8 +366,8 @@ def searchByName(userID, target, desending = True, sortedColumn = None):
 	return cursor
 	
 def searchByDate(userID,  year, month, day, comparison = 0, desending = True, sortedColumn = None):
-	DATABASE = connectDB()
-	cursor = DATABASE.cursor()
+	database = connectDB()
+	cursor = database.cursor()
 	
 	query = """"SELECT * FROM Watch_Records 
 			WHERE User_ID = :userID AND Date_Watched """
@@ -391,10 +393,5 @@ def searchByDate(userID,  year, month, day, comparison = 0, desending = True, so
 	
 	date = year + "-" + month + "-" + day
 	cursor.execute(query, (userID, "%" + target +"%"))
-	return cursor	
-
-def closeConnection():
-	if(DATABASE != None):
-		DATABASE.close()
-	
+	return cursor
 	

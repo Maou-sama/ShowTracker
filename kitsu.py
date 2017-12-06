@@ -2,11 +2,11 @@
 
 import requests
 import json
-from item import *
+from Item import *
 
 url = 'https://kitsu.io/api/edge'
 
-def SearchAnimeWithID(database_id):
+def LiteSearchAnimeWithID(database_id):
     #API url for searching
     search_url = url + '/anime'
     payload = {'filter[id]' : database_id}
@@ -15,6 +15,10 @@ def SearchAnimeWithID(database_id):
     #Get the results of the search
     anime_details = json.loads(json.dumps(r.json()))['data'][0]['attributes']
     #Put the title, episode # and release date in a list and return it
+    if(anime_details['episodeCount'] == None):
+        anime_details['episodeCount'] = 9999
+    if(anime_details['startDate'] == None or anime_details['startDate'] == ''):
+        anime_details['startDate'] = '1900-01-01'
     listOfDetails = [anime_details['canonicalTitle'], anime_details['episodeCount'], anime_details['startDate']]
     
     return listOfDetails

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, url_for, redirect
 from MovieDB import *
-from kitsu import *
+from Kitsu import *
 from DBFunctionality import *
 
 app = Flask(__name__)
@@ -137,14 +137,14 @@ def addMedia():
         mediatype = request.form['type']
         #Insert to database depends on type
         if(mediatype == 'Movie'):
-            detail_mov_list = SearchMovieWithID(database_id)
-            insertNewMovie(userID, detail_mov_list[0], 'Youtube', str(None), int(detail_mov_list[1].split('-')[0]))
+            detail_mov_list = LiteSearchMovieWithID(database_id)
+            insertNewMovie(userID, database_id, detail_mov_list[0], 'Youtube', str(None), int(detail_mov_list[1].split('-')[0]))
         elif(mediatype == 'TVShow'):
-            detail_tv_list = SearchTVWithID(database_id)
-            insertNewTVshow(userID, detail_tv_list[0], 'Youtube', int(detail_tv_list[1].split('-')[0]), int(detail_tv_list[2]), 0)
+            detail_tv_list = LiteSearchTVWithID(database_id)
+            insertNewTVshow(userID, database_id, detail_tv_list[0], 'Youtube', int(detail_tv_list[1].split('-')[0]), int(detail_tv_list[2]), 0)
         elif(mediatype == 'Anime'):
-            detail_anime_list = SearchAnimeWithID(database_id)
-            insertNewTVshow(userID, detail_anime_list[0], 'Crunchyroll', int(detail_anime_list[2].split('-')[0]), int(detail_anime_list[1]), 0, True)
+            detail_anime_list = LiteSearchAnimeWithID(database_id)
+            insertNewTVshow(userID, database_id, detail_anime_list[0], 'Crunchyroll', int(detail_anime_list[2].split('-')[0]), int(detail_anime_list[1]), 0, True)
         #Go to tracking page
         return redirect(url_for('tracking'))
 
@@ -160,7 +160,7 @@ def tracking():
         #Get the movies and tv shows and animes that user are tracking from database
         resultMovie = getAllUserMovieRecords(userID)
         resultTV = getAllUserTVRecords(userID)
-        resultAnime = getAllUserAnimeRecords(userID)
+        resultAnime = getAllUserAnimeRecords(userID)    
         #Render the page with the list
         return render_template('tracker.html', movies=resultMovie, tvshows=resultTV, animes=resultAnime)
 
@@ -176,8 +176,9 @@ def updateProcess():
         #Get the record ID and the episode user input
         recordID = request.form['id']
         episode = request.form['episode']
-        #Update in database
-        updateTVShow(userID, int(recordID), int(episode))
+        if(episode != ''):
+            #Update in database
+            updateTVShow(userID, int(recordID), int(episode))
         #Go back to tracking page after done
         return redirect(url_for('tracking'))
 
@@ -200,4 +201,4 @@ def deleteProcess():
 app.secret_key = 'some key that you will never guess'
 
 if __name__ == "__main__":
-    app.run('127.0.0.1', 5000, debug = True)
+    app.run('0.0.0.0', 5000, debug = True)
