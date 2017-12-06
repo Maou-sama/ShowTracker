@@ -63,7 +63,7 @@
 	  </div>
 	</nav>
 	<div class = "container-fluid">
-		<h1>General Shows</h1>
+		<h1>TV Shows</h1>
 
 		<hr />
 		<table class="table table-hover" id = "showTable">
@@ -71,8 +71,7 @@
 		    <tr>
 		      <th scope="col">Title</th>
 		      <th scope="col">Date Watched</th>
-		      <th scope="col">Episode Count</th>
-			  <th scope="col">Episode Watched</th>
+			  <th scope="col">Progress</th>
 		      <th scope="col" class = "updater">Update</th>
 		    </tr>
 		  </thead>
@@ -81,8 +80,7 @@
 		    <tr>
 		      <td>{{line[2]}}</td>
 		      <td>{{line[4]}}</td>
-		      <td>{{line[7]}}</td>
-			  <td>{{line[9]}}</td>
+			  <td><div class="progress"><div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="13" style={{line[10]}}></div></div>{{line[9]}}/{{line[7]}}</td>
 			  <form action="/updateProcess" method="POST">
 		      <td ><input type="text" id="episode" name="episode" class="form-control" aria-label="Text input with checkbox" ></td>
 		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[1]}}><button type="submit" class="btn btn-primary">Update</button></td>
@@ -132,8 +130,7 @@
 		    <tr>
 		      <th scope="col">Title</th>
 		      <th scope="col">Date Watched</th>
-		      <th scope="col">Episode Count</th>
-			  <th scope="col">Episode Watched</th>
+			  <th scope="col">Progress</th>
 		      <th scope="col" class = "updater">Update</th>
 		    </tr>
 		  </thead>
@@ -142,8 +139,7 @@
 		    <tr>
 		      <td>{{line[2]}}</td>
 		      <td>{{line[4]}}</td>
-		      <td>{{line[7]}}</td>
-			  <td>{{line[9]}}</td>
+			  <td><div class="progress"><div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="13" style={{line[10]}}></div></div>{{line[9]}}/{{line[7]}}</td>
 		      <form action="/updateProcess" method="POST">
 		      <td ><input type="text" id="episode" name="episode" class="form-control" aria-label="Text input with checkbox" ></td>
 		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[1]}}><button type="submit" class="btn btn-primary">Update</button></td>
