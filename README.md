@@ -1,10 +1,12 @@
 # ShowTracker
 CS4523 Design Project 
 
-A program designed for searching various type of shows(currently movie, tv show and anime)
-and track it with user input (user has to manually input the episode watched)
+Initial Release complete as of 12/6/17. Future implementations will be considered
 
-Dependency:
+A program designed for searching various type of shows(currently movies, tv shows, and anime)
+and tracking it with user input (user has to manually input the episode watched).
+
+Dependencies:
 
 -Python 3.x
 
