@@ -23,6 +23,24 @@ def LiteSearchAnimeWithID(database_id):
     
     return listOfDetails
 
+def FullSearchAnimeWithID(database_id):
+    #API url for searching
+    search_url = url + '/anime'
+    payload = {'filter[id]' : database_id}
+    #Request the url
+    r = requests.get(search_url, params=payload)
+    #Get the results of the search
+    anime_details = json.loads(json.dumps(r.json()))['data'][0]['attributes']
+    #Put details in a list and return it
+    if 'ja_jp' in anime_details['titles']:
+        listOfDetails = [anime_details['canonicalTitle'], str(anime_details['startDate']), str(anime_details['episodeCount']),
+                         str(anime_details['titles']['ja_jp']), 'ja', str(anime_details['synopsis']), str(anime_details['posterImage']['large'])]
+
+    else:
+        listOfDetails = [anime_details['canonicalTitle'], str(anime_details['startDate']), str(anime_details['episodeCount']),
+                         'None', 'ja', str(anime_details['synopsis']), str(anime_details['posterImage']['large'])]
+    return listOfDetails
+
 def SearchAnime(title):
     #API url for searching
     search_url = url + '/anime'

@@ -5,18 +5,17 @@ import binascii
 import base64
 import os
 
-defaultHost = "127.0.0.1";
-defaultUserName = "root";
-defaultPassword = "";
-defaultDB = "showtrackerdb";
+defaultHost = "code.engineering.nyu.edu";
+defaultUserName = "kn1049";
+defaultPassword = "AFE#9for2q4eg";
+defaultDB = "kn1049";
 defaultPort = 3306;
 
 def connectDB ():
 	database = MySQLdb.connect(host = defaultHost,
                      user = defaultUserName,
                      passwd = defaultPassword,
-                     db = defaultDB,
-                     port = defaultPort)
+                     db = defaultDB)
 	return database
 	
 def changeDefaultDBConnection(port, username = None, password = None, host = None):
@@ -32,8 +31,19 @@ def changeDefaultDBConnection(port, username = None, password = None, host = Non
 	if(password):
 		defaultPassword = password
 
+def checkTable():
+        database = connectDB()
+        cursor = database.cursor()
+        cursor.execute("""SELECT * FROM Login_Info;""")
+        if(cursor.fetchone()):
+                cursor.close()
+                database.close()
+                return -1
+        else:
+                return 0
 def wipeDB():
         database = connectDB()
+        database.query("""SET FOREIGN_KEY_CHECKS=0;""")
         database.query("""DROP TABLE IF EXISTS Login_Info;""")
         database.query("""DROP TABLE IF EXISTS Movies;""")
         database.query("""DROP TABLE IF EXISTS TV_Shows;""")
@@ -89,7 +99,7 @@ def initiateDB():
 def insertNewLogin(email, password):
 	database = connectDB()
 	cursor = database.cursor()
-	cursor.execute("""SELECT * FROM Login_info 
+	cursor.execute("""SELECT * FROM Login_Info 
 					WHERE Email = %s ;""", (email,))
 	if(cursor.fetchone()):
 		cursor.close()
@@ -103,7 +113,7 @@ def insertNewLogin(email, password):
 	hash = binascii.hexlify(hasher)
 	
 	
-	cursor.execute("""INSERT INTO Login_info (Email, Password_Hash, Salt)
+	cursor.execute("""INSERT INTO Login_Info (Email, Password_Hash, Salt)
 					VALUES ( %s, %s, %s );""", (email, hash.decode(), base64.b64encode(salt).decode()))
 	
 	database.commit()
@@ -115,7 +125,7 @@ def insertNewLogin(email, password):
 def checkLogin(email, password):
 	database = connectDB()
 	cursor = database.cursor()
-	cursor.execute("""SELECT Email, Password_Hash, Salt FROM Login_info 
+	cursor.execute("""SELECT Email, Password_Hash, Salt FROM Login_Info 
 					WHERE Email = %s ;""", (email,))
 	result = cursor.fetchone()
 	if(result == None):
@@ -141,7 +151,7 @@ def checkLogin(email, password):
 def getUserID(email):
         database = connectDB()
         cursor = database.cursor()
-        cursor.execute("""SELECT User_ID FROM Login_info WHERE Email = %s;""", (email,))
+        cursor.execute("""SELECT User_ID FROM Login_Info WHERE Email = %s;""", (email,))
 
         result = cursor.fetchone()
         cursor.close()
@@ -169,7 +179,7 @@ def insertNewTVshow(userID, database_id, videoName, platformName, yearPublished,
 		insertNewRecord(userID, videoName, platformName, "T", cursor)
 	else:
 		insertNewRecord(userID, videoName, platformName, "A", cursor)
-	cursor.execute("""INSERT INTO TV_shows (Record_ID, Database_ID, Year_Published, Episode_Count, Recent_Episode_Watched)
+	cursor.execute("""INSERT INTO TV_Shows (Record_ID, Database_ID, Year_Published, Episode_Count, Recent_Episode_Watched)
 					VALUES (LAST_INSERT_ID(), %s, %s, %s, %s);""", (database_id, yearPublished, ep_count, lastEpisodeWatched))
 	database.commit()
 	cursor.close()
@@ -198,7 +208,7 @@ def updateRecord(userID, recordID):
 def updateTVShow(userID, recordID, lastEpisodeWatched):
 	database = connectDB()
 	cursor = database.cursor()
-	cursor.execute("""SELECT Episode_Count FROM tv_shows
+	cursor.execute("""SELECT Episode_Count FROM TV_Shows
 					WHERE Record_ID = %s ;""", (recordID,))
 	result = cursor.fetchone()
 
@@ -206,7 +216,7 @@ def updateTVShow(userID, recordID, lastEpisodeWatched):
                 cursor.execute("""UPDATE Watch_Records 
                                 SET Date_Watched = CURDATE() 
                                 WHERE Record_ID = %s AND User_ID = %s;""", (recordID, userID))
-                cursor.execute("""UPDATE TV_shows 
+                cursor.execute("""UPDATE TV_Shows 
                                 SET Recent_Episode_Watched = %s 
                                 WHERE Record_ID = %s""", (lastEpisodeWatched, recordID))
                 
@@ -225,7 +235,7 @@ def deleteRecord(userID, recordID):
 		cursor.execute("""DELETE FROM Movies 
                         WHERE Record_ID = %s ;""", (recordID,))
 	elif(result[0] == 'T' or result[0] == 'A'):
-		cursor.execute("""DELETE FROM tv_shows 
+		cursor.execute("""DELETE FROM TV_Shows 
                         WHERE Record_ID = %s ;""", (recordID,))
 	else:
 		cursor.execute("""DELETE FROM other 
@@ -243,8 +253,8 @@ def getAllUserRecords(userID, addSeasonEpisodeNumber = False, desending = True, 
 	
 	if(addSeasonEpisodeNumber):
 		query = """SELECT User_ID, Watch_Records.Record_ID, Video_Type, Date_Watched, Platform, Episode_Count, Recent_Episode_Watched 
-            FROM Watch_Records LEFT JOIN TV_shows 
-            ON Watch_Records.Record_ID = TV_shows.Record_ID 
+            FROM Watch_Records LEFT JOIN TV_Shows 
+            ON Watch_Records.Record_ID = TV_Shows.Record_ID 
             WHERE User_ID = %s """;
 	else:
 		query = """SELECT * FROM Watch_Records 
@@ -309,7 +319,7 @@ def getAllUserAnimeRecords(userID, desending = True, sortedColumn = None):
 	cursor = database.cursor()
 	
 	query = """SELECT *, concat('width:',round(( recent_episode_watched/episode_count * 100 ),2),'%%') AS style
-                FROM Watch_Records LEFT JOIN TV_shows ON Watch_Records.Record_ID = TV_shows.Record_ID WHERE Video_Type = 'A' AND User_ID = %s """
+                FROM Watch_Records LEFT JOIN TV_Shows ON Watch_Records.Record_ID = TV_Shows.Record_ID WHERE Video_Type = 'A' AND User_ID = %s """
 	
 	if(sortedColumn == None):
 		query = query + "ORDER BY Date_Watched "

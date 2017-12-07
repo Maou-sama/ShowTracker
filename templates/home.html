@@ -7,7 +7,7 @@
 	<style>
 		body
 		{
-			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
+			background-image:	url("{{ url_for('static', filename='background.jpg') }}");
 		}
 
 		div
@@ -32,7 +32,7 @@
 			height:	150px;
 		}
 	</style>
-</head>
+</head>	
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -60,7 +60,7 @@
 		<h1>Welcome!</h1>
 		<br />
 
-		<img src = "http://sunfieldfarm.org/wp-content/uploads/2014/02/profile-placeholder.png" />
+		<img src = "{{ url_for('static', filename='profile.png') }}" />
 		<br />
 		<br />
 

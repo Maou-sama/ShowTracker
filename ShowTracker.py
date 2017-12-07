@@ -93,6 +93,8 @@ def movieResult():
     else:
         #Get the name from user input
         title = request.form['title']
+        if(title == ''):
+            return redirect(url_for('search'))
         #Search movie then render the page with the list
         mov_list = SearchMovie(title)
         return render_template('movieresult.html', movies=mov_list)
@@ -106,6 +108,8 @@ def tvResult():
     else:
         #Get the name from user input
         title = request.form['title']
+        if(title == ''):
+            return redirect(url_for('search'))
         #Search movie then render the page with the list
         tv_list = SearchTVShow(title)
         return render_template('tvresult.html', movies=tv_list)
@@ -119,6 +123,8 @@ def animeResult():
     else:
         #Get the name from user input
         title = request.form['title']
+        if(title == ''):
+            return redirect(url_for('search'))
         #Search movie then render the page with the list
         ani_list = SearchAnime(title)
         return render_template('animeresult.html', movies=ani_list)
@@ -197,6 +203,22 @@ def deleteProcess():
         deleteRecord(userID, int(recordID))
         #Go back to tracking page after done
         return redirect(url_for('tracking'))
+
+@app.route('/info', methods=['GET', 'POST'])
+def info():
+    #Redirect back to index if not logged in
+    if 'username' not in session:
+        return redirect(url_for('index'))
+    else:
+        database_id = request.form['id']
+        media_type = request.form['type']
+        if(media_type == "Movie"):
+            media_details = FullSearchMovieWithID(database_id)
+        elif(media_type == "TVShow"):
+            media_details = FullSearchTVWithID(database_id)
+        elif(media_type == "Anime"):
+            media_details = FullSearchAnimeWithID(database_id)
+        return render_template('info.html', detail=media_details)
         
 app.secret_key = 'some key that you will never guess'
 

@@ -7,7 +7,8 @@
 	<style>
 		body
 		{
-			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
+			background-image:	url("{{ url_for('static', filename='background.jpg') }}");
+			font-size: 110%;
 			padding:	0px;
 		}
 
@@ -25,10 +26,10 @@
 		{
 			border:	solid 0.1px white;
 			background-color:	white;
-			opacity:	0.85;
+			opacity:	1;
 			width:	75vw;
 			min-height:	80vh;
-			padding:	20px;
+			padding:	10px;
 			margin-top: 5vh;
 			border-radius:	25px;
 			text-align:	center;
@@ -67,7 +68,7 @@
 		<div class="row">
 		  <div class="col">
 		  	<br />
-		  	<img src = "img/christmasbg.jpg" />
+		  	<img src = {{detail[6]}} />
 		  </div>
 		  <div class="col">
 		  	<div class = "row">
@@ -75,23 +76,43 @@
 		  	</div>
 		  	<h4>Title</h2>
 		  	<div>
-		  		Title here
+		  		{{detail[0]}}
 		  	</div>
 		  	<br />
+			<br />
 		  	<div class = "row">
 		  		
 		  	</div>
 		  	<h4>Date Published</h2>
 		  	<div>
-		  		Date here
+		  		{{detail[1]}}
 		  	</div>
 		  	<br />
+			<br />
 		  	<div class = "row">
 		  		
 		  	</div>
 		  	<h4>Overview</h2>
 		  	<div>
-		  		Overview here
+		  		{{detail[5]}}
+		  	</div>
+			<br />
+			<br />
+			<h4>Original Language</h2>
+		  	<div>
+		  		{{detail[4]}}
+		  	</div>
+			<br />
+			<br />
+			<h4>Original Titile</h2>
+		  	<div>
+		  		{{detail[3]}}
+		  	</div>
+			<br />
+			<br />
+			<h4>Number Of Episode</h2>
+		  	<div>
+		  		{{detail[2]}}
 		  	</div>
 		  </div>
 		</div>

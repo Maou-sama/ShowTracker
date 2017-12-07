@@ -7,7 +7,7 @@
 	<style>
 		body
 		{
-			background-image:	url("https://upload.wikimedia.org/wikipedia/commons/9/92/Elegant_Background-14.jpg");
+			background-image:	url("{{ url_for('static', filename='background.jpg') }}");
 			padding:	0px;
 		}
 
@@ -88,8 +88,8 @@
 		      <form action="/deleteProcess" method="POST">
 		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[1]}}><button type="submit" class="btn btn-danger">Delete</button></td>
 			  </form>
-			  <form action="/infoProcess" method="POST">
-		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><button type="submit" class="btn btn-info">Info</button></td>
+			  <form action="/info" method="POST">
+		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><input type="hidden" id="type" name="type" value="TVShow"><button type="submit" class="btn btn-info">Info</button></td>
 			  </form>
 		    </tr>
 			{% endfor %}
@@ -117,8 +117,8 @@
 		      <form action="/deleteProcess" method="POST">
 		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[1]}}><button type="submit" class="btn btn-danger">Delete</button></td>
 			  </form>
-			  <form action="/infoProcess" method="POST">
-		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><button type="submit" class="btn btn-info">Info</button></td>
+			  <form action="/info" method="POST">
+		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><input type="hidden" id="type" name="type" value="Movie"><button type="submit" class="btn btn-info">Info</button></td>
 			  </form>
 		    </tr>	
 			{% endfor %}
@@ -153,8 +153,8 @@
 			  <form action="/deleteProcess" method="POST">
 		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[1]}}><button type="submit" class="btn btn-danger">Delete</button></td>
 			  </form>
-			  <form action="/infoProcess" method="POST">
-		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><button type="submit" class="btn btn-info">Info</button></td>
+			  <form action="/info" method="POST">
+		      <td class = "tdButton"><input type="hidden" id="id" name="id" value={{line[7]}}><input type="hidden" id="type" name="type" value="Anime"><button type="submit" class="btn btn-info">Info</button></td>
 			  </form>
 		    </tr>
 			{% endfor %}

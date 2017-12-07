@@ -5,9 +5,22 @@
 	<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<style>
+		body
+		{
+			background-image:	url("{{ url_for('static', filename='background1.jpg') }}");
+		}
+		
 		div
 		{
 			border:	solid 0px black;
+		}
+		
+		.container-fluid
+		{
+			border:	solid 0.1px black;
+			text-align:	center;
+			background-color:	lightblue;
+			opacity:	0.85;
 		}
 		
 		#overview
@@ -39,7 +52,7 @@
 	  </div>
 	</nav>
 
-	<div class = "container-fluid" style = "margin-top: 20px; text-align: center">
+	<div class = "container-fluid" style = "margin-top: 0px; text-align: center">
 		<table class="table table-hover">
 		  <thead class="thead-dark">
 		    <tr>

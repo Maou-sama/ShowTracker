@@ -8,6 +8,7 @@ url = 'https://api.themoviedb.org/3'
 
 #Poster URL for w185 picture
 poster_url = 'https://image.tmdb.org/t/p/w185'
+poster_url_w500 = 'https://image.tmdb.org/t/p/w500'
 
 api_key = '214a06075aa82fef47cc3c4c2e61caf6'
 
@@ -26,6 +27,20 @@ def LiteSearchMovieWithID(database_id):
 
     return listOfDetails
 
+def FullSearchMovieWithID(database_id):
+    #API url to search movie
+    search_url = url + '/movie/' + database_id
+    payload = {'api_key' : api_key}
+    #Request the url
+    r = requests.get(search_url,  params = payload)
+    #Get details
+    movie_details = json.loads(json.dumps(r.json()))
+    #Add details to a list then return it
+    listOfDetails = [movie_details['title'], str(movie_details['release_date']), 1, str(movie_details['original_title']), str(movie_details['original_language']), str(movie_details['overview'])
+                     , poster_url_w500 + str(movie_details['poster_path'])]
+
+    return listOfDetails
+
 def LiteSearchTVWithID(database_id):
     #API url to search movie
     search_url = url + '/tv/' + database_id
@@ -40,6 +55,20 @@ def LiteSearchTVWithID(database_id):
     if(tv_details['first_air_date'] == None or tv_details['first_air_date'] == ''):
         tv_details['first_air_date'] = '1900-01-01'
     listOfDetails = [tv_details['name'], tv_details['first_air_date'], tv_details['number_of_episodes']]
+
+    return listOfDetails
+
+def FullSearchTVWithID(database_id):
+    #API url to search movie
+    search_url = url + '/tv/' + database_id
+    payload = {'api_key' : api_key}
+    #Request the url
+    r = requests.get(search_url,  params = payload)
+    #Get details
+    tv_details = json.loads(json.dumps(r.json()))
+    #Add details to a list then return it
+    listOfDetails = [tv_details['name'], str(tv_details['first_air_date']), str(tv_details['number_of_episodes']), str(tv_details['original_name']),
+                     str(tv_details['original_language']), str(tv_details['overview']), poster_url_w500 + str(tv_details['poster_path'])]
 
     return listOfDetails
     
