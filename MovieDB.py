@@ -111,7 +111,10 @@ def SearchTVShow(title):
     #Loops through the shows, search the details for episode number and create movie item object
     for items in tv_details:
         new_r = requests.get(search_url_detail+str(items['id']), params=payload_detail)
-        ep_number = json.loads(json.dumps(new_r.json()))['number_of_episodes']
+        if('number_of_episodes' in json.loads(json.dumps(new_r.json()))):
+            ep_number = json.loads(json.dumps(new_r.json()))['number_of_episodes']
+        else:
+            ep_number = 10000
         tv_list.append(movie_item(str(items['id']),
                                   str(items['name']),
                                   str(items['popularity']),
