@@ -16,8 +16,12 @@ Dependencies:
 
 -requests
 
--mysql database
+-json (if it doesn't come with python)
 
-First initialize the database using initializeDB function
+Instruction for running server:
 
-Then run ShowTracker.py with database online
+Run ShowTracker.py
+
+Warning: Server will not work if NYU database is down
+
+Extra Warning: ResetDatabase.py will reset all the table
