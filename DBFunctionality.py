@@ -5,10 +5,10 @@ import binascii
 import base64
 import os
 
-defaultHost = "code.engineering.nyu.edu";
-defaultUserName = "kn1049";
-defaultPassword = "AFE#9for2q4eg";
-defaultDB = "kn1049";
+defaultHost = "showtracker.cpjzd8tz0d4b.ap-northeast-1.rds.amazonaws.com";
+defaultUserName = "master";
+defaultPassword = "anonymous";
+defaultDB = "showtracker";
 defaultPort = 3306;
 
 def connectDB ():
