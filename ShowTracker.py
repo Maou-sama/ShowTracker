@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, url_for, redirect
 from MovieDB import *
-from Kitsu import *
+from kitsu import *
 from DBFunctionality import *
 
 app = Flask(__name__)

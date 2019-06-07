@@ -2,7 +2,7 @@
 
 import requests
 import json
-from Item import *
+from item import *
 
 url = 'https://api.themoviedb.org/3'
 
