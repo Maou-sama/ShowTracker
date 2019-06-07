@@ -220,7 +220,7 @@ def info():
             media_details = FullSearchAnimeWithID(database_id)
         return render_template('info.html', detail=media_details)
         
-application.secret_key = 'some key that you will never guess'
+application.secret_key = '2C5$Ge)MHNSR~lnF.daEe{>Z"Pxs9&GD,x+ZO6sd?>Ar{a@;`u5vpuq;uM};g5d'
 
 if __name__ == "__main__":
     application.run('0.0.0.0', 5000, debug = True)
