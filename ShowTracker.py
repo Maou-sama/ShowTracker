@@ -3,14 +3,14 @@ from MovieDB import *
 from kitsu import *
 from DBFunctionality import *
 
-app = Flask(__name__)
+application = Flask(__name__)
 
-@app.route('/')
+@application.route('/')
 def toMain():
     return redirect(url_for('index'))
 
 #Index Page
-@app.route('/index')
+@application.route('/index')
 def index():
     #Go to home if there is an active user else render the page
     if 'username' in session:
@@ -19,7 +19,7 @@ def index():
         return render_template('index.html')
 
 #Authenticate login
-@app.route('/loginAuth', methods=['GET', 'POST'])
+@application.route('/loginAuth', methods=['GET', 'POST'])
 def loginAuth():
     username = request.form['username']
     password = request.form['password']
@@ -33,7 +33,7 @@ def loginAuth():
         return render_template('index.html', message=message)
 
 #Register Page
-@app.route('/register')
+@application.route('/register')
 def register():
     #Go to home if there is an active user else render the page
     if 'username' in session:
@@ -42,7 +42,7 @@ def register():
         return render_template('register.html')
 
 #Authenticate Registration
-@app.route('/registerAuth', methods=['GET', 'POST'])
+@application.route('/registerAuth', methods=['GET', 'POST'])
 def registerAuth():
     username = request.form['username']
     password = request.form['password']
@@ -61,7 +61,7 @@ def registerAuth():
         return render_template('register.html', message=message)
         
 #Home Page
-@app.route('/home')
+@application.route('/home')
 def home():
     #Redirect back to index if not logged in else render the page
     if 'username' not in session:
@@ -70,13 +70,13 @@ def home():
         return render_template('home.html')
 
 #Delete user from active session when log out
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     session.pop('username')
     return redirect('/')
 
 #Search Page
-@app.route('/search')
+@application.route('/search')
 def search():
     #Redirect back to index if not logged in else render the page
     if 'username' not in session:
@@ -85,7 +85,7 @@ def search():
         return render_template('search.html')
 
 #Search moviedb and get the results(display a maximum of 20 items)
-@app.route('/movieresult', methods=['GET', 'POST'])
+@application.route('/movieresult', methods=['GET', 'POST'])
 def movieResult():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -100,7 +100,7 @@ def movieResult():
         return render_template('movieresult.html', movies=mov_list)
 
 #Search moviedb and get the results(display a maximum of 20 items)
-@app.route('/tvresult', methods=['GET', 'POST'])
+@application.route('/tvresult', methods=['GET', 'POST'])
 def tvResult():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -115,7 +115,7 @@ def tvResult():
         return render_template('tvresult.html', movies=tv_list)
 
 #Search kitsu and get the results(display a maximum of 20 items)
-@app.route('/animeresult', methods=['GET', 'POST'])
+@application.route('/animeresult', methods=['GET', 'POST'])
 def animeResult():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -130,7 +130,7 @@ def animeResult():
         return render_template('animeresult.html', movies=ani_list)
 
 #Add the media to database to track
-@app.route('/addMedia', methods=['GET', 'POST'])
+@application.route('/addMedia', methods=['GET', 'POST'])
 def addMedia():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -155,7 +155,7 @@ def addMedia():
         return redirect(url_for('tracking'))
 
 #Tracking Page
-@app.route('/tracking')
+@application.route('/tracking')
 def tracking():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -171,7 +171,7 @@ def tracking():
         return render_template('tracker.html', movies=resultMovie, tvshows=resultTV, animes=resultAnime)
 
 #Process update for show
-@app.route('/updateProcess', methods=['GET', 'POST'])
+@application.route('/updateProcess', methods=['GET', 'POST'])
 def updateProcess():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -189,7 +189,7 @@ def updateProcess():
         return redirect(url_for('tracking'))
 
 #Process delete for show
-@app.route('/deleteProcess', methods=['GET', 'POST'])
+@application.route('/deleteProcess', methods=['GET', 'POST'])
 def deleteProcess():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -204,7 +204,7 @@ def deleteProcess():
         #Go back to tracking page after done
         return redirect(url_for('tracking'))
 
-@app.route('/info', methods=['GET', 'POST'])
+@application.route('/info', methods=['GET', 'POST'])
 def info():
     #Redirect back to index if not logged in
     if 'username' not in session:
@@ -220,7 +220,7 @@ def info():
             media_details = FullSearchAnimeWithID(database_id)
         return render_template('info.html', detail=media_details)
         
-app.secret_key = 'some key that you will never guess'
+application.secret_key = 'some key that you will never guess'
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', 5000, debug = True)
+    application.run('0.0.0.0', 5000, debug = True)

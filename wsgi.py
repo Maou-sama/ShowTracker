@@ -1,6 +1,4 @@
-from ShowTracker import app
-
-application = app
+from ShowTracker import application
 
 if __name__ == "__main__":
 	application.run()
