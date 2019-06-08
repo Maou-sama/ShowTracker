@@ -1,4 +1,4 @@
-# ShowTracker
+## ShowTracker
 CS4523 Design Project 
 
 Initial Release complete as of 12/6/17. Future implementations will be considered
@@ -6,7 +6,7 @@ Initial Release complete as of 12/6/17. Future implementations will be considere
 A program designed for searching various type of shows(currently movies, tv shows, and anime)
 and tracking it with user input (user has to manually input the episode watched).
 
-Dependencies:
+#Dependencies:
 
 -Python 3.x
 
@@ -16,12 +16,12 @@ Dependencies:
 
 -requests
 
--json (if it doesn't come with python)
+-gunicorn (only for production deployment)
 
-Instruction for running server:
+A demo server is available at: https://oneandonlytracker.herokuapp.com/
 
-Run ShowTracker.py
+#Instruction for running server:
 
-Warning: Server will not work if NYU database is down
+-Deploy on herokuapp: clone/fork the repository and deploy
 
-Extra Warning: ResetDatabase.py will reset all the table
+-Your own server: Install the dependencies and deploy a dev/test build by running ShowTracker.py, i.e. $python ShowTracker.py
