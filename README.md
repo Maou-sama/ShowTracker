@@ -22,6 +22,6 @@ A demo server is available at: https://oneandonlytracker.herokuapp.com/
 
 ## Instruction for running server:
 
--Deploy on herokuapp: clone/fork the repository and deploy
+-Deploy on herokuapp: clone/fork the repository, update DBFunctionality.py to point to your own DB and deploy
 
--Your own server: Install the dependencies and deploy a dev/test build by running ShowTracker.py, i.e. $python ShowTracker.py
+-Your own server: Install the dependencies, update DBFunctionality.py and deploy a dev/test build by running ShowTracker.py, i.e. $python ShowTracker.py
