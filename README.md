@@ -6,7 +6,7 @@ Initial Release complete as of 12/6/17. Future implementations will be considere
 A program designed for searching various type of shows(currently movies, tv shows, and anime)
 and tracking it with user input (user has to manually input the episode watched).
 
-#Dependencies:
+# Dependencies:
 
 -Python 3.x
 
@@ -20,7 +20,7 @@ and tracking it with user input (user has to manually input the episode watched)
 
 A demo server is available at: https://oneandonlytracker.herokuapp.com/
 
-#Instruction for running server:
+# Instruction for running server:
 
 -Deploy on herokuapp: clone/fork the repository and deploy
 
